@@ -64,7 +64,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
       # Tell search engines (Bing, and through it ChatGPT search; Yandex; others) the pages changed,
       # instead of waiting for a crawl. The key file is site/public/<key>.txt. Never fails a deploy.
       - name: IndexNow
