@@ -52,7 +52,7 @@ jobs:
           # Set the repository variable SITE_BASE_PATH to /hintbeam while the site is only at
           # <org>.github.io/hintbeam; delete it once hintbeam.js.org points here.
           SITE_BASE_PATH: ${{ vars.SITE_BASE_PATH }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site/out
 
