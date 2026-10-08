@@ -1,0 +1,16 @@
+# Weekly dependency update pull requests. Nothing merges without a maintainer.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: weekly }
+    groups:
+      dev-dependencies: { dependency-type: development }
+  - package-ecosystem: npm
+    directory: /site
+    schedule: { interval: weekly }
+    groups:
+      site: { patterns: ["*"] }
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: monthly }

@@ -1,0 +1,17 @@
+dist
+node_modules
+coverage
+site/node_modules
+site/.next
+site/out
+site/.lib
+site/next-env.d.ts
+site/package-lock.json
+*.md
+/web/
+/native/
+/core/
+/next/
+/react-router/
+/expo-router/
+/react-navigation/
