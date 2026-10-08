@@ -1,0 +1,80 @@
+name: Site
+
+# Builds hintbeam.js.org (the Next.js site in site/) as static HTML and deploys it to GitHub Pages.
+# It runs on every push to main — so merging a pull request is the approval for a docs or blog
+# change — and can be run by hand. To also require a click before each deploy, add a required
+# reviewer to the `github-pages` environment in the repository settings.
+
+on:
+  push:
+    branches: [main]
+    # Only what the site is built from: its own code, the docs, the library and the changelog.
+    paths:
+      - "site/**"
+      - "docs/**"
+      - "src/**"
+      - "package.json"
+      - "CHANGELOG.md"
+      - ".changeset/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            site/package-lock.json
+      - run: npm ci
+      - working-directory: site
+        run: npm ci
+      # The site uses the packed library, exactly as someone installing it from npm would.
+      - working-directory: site
+        run: npm run lib
+      - working-directory: site
+        run: npm run build
+        env:
+          # Set the repository variable SITE_BASE_PATH to /hintbeam while the site is only at
+          # <org>.github.io/hintbeam; delete it once hintbeam.js.org points here.
+          SITE_BASE_PATH: ${{ vars.SITE_BASE_PATH }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      # Tell search engines (Bing, and through it ChatGPT search; Yandex; others) the pages changed,
+      # instead of waiting for a crawl. The key file is site/public/<key>.txt. Never fails a deploy.
+      - name: IndexNow
+        # Not for a sub-path preview: only the real domain is announced.
+        if: vars.SITE_BASE_PATH == ''
+        continue-on-error: true
+        env:
+          SITE: https://hintbeam.js.org
+          KEY: bad0a391fc9a7d9e02fded0e7d35c311
+        run: |
+          urls=$(curl -sf "$SITE/sitemap.xml" | grep -o '<loc>[^<]*</loc>' | sed 's/<[^>]*>//g' | jq -R . | jq -sc .)
+          [ -n "$urls" ] && curl -sf -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/json' \
+            -d "{\"host\":\"hintbeam.js.org\",\"key\":\"$KEY\",\"keyLocation\":\"$SITE/$KEY.txt\",\"urlList\":$urls}" && echo "IndexNow: sent"

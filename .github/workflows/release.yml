@@ -1,0 +1,45 @@
+name: Release
+
+# Opens (or updates) a "Version packages" pull request from the changesets on main. Merging that
+# pull request publishes to npm and tags vX.Y.Z — two approvals: the merge, then the `npm`
+# environment, which must be set to require a maintainer's approval.
+#
+# Credentials: npm trusted publishing (OIDC) — no long-lived token. npm only lets a package that
+# already exists add a trusted publisher, so v0.1.0 is published once by hand (`npm publish` with
+# 2FA); then add this repository and `release.yml` as the trusted publisher on npmjs.com. Until
+# then, an NPM_TOKEN secret also works.
+
+on:
+  push:
+    branches: [main]
+
+concurrency: release-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24 # npm 11: trusted publishing
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run check
+      - uses: changesets/action@v1
+        with:
+          version: npm run version-packages
+          publish: npm run release
+          commit: "chore: version packages"
+          title: "Version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true

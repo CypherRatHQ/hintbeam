@@ -1,0 +1,174 @@
+{
+  "name": "hintbeam",
+  "version": "0.0.0",
+  "description": "Guided flows and product tours for React, Next.js and React Native. Tours that find their elements, follow users across pages, and never break when the app scrolls or moves.",
+  "license": "MIT",
+  "author": "CypherRat HQ (https://github.com/CypherRatHQ)",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/web/index.js",
+  "module": "./dist/web/index.js",
+  "types": "./dist/web/index.d.ts",
+  "react-native": "./dist/native/index.js",
+  "exports": {
+    ".": {
+      "react-native": {
+        "types": "./dist/native/index.d.ts",
+        "default": "./dist/native/index.js"
+      },
+      "types": "./dist/web/index.d.ts",
+      "default": "./dist/web/index.js"
+    },
+    "./web": {
+      "types": "./dist/web/index.d.ts",
+      "default": "./dist/web/index.js"
+    },
+    "./native": {
+      "types": "./dist/native/index.d.ts",
+      "default": "./dist/native/index.js"
+    },
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "default": "./dist/core/index.js"
+    },
+    "./next": {
+      "types": "./dist/routers/next.d.ts",
+      "default": "./dist/routers/next.js"
+    },
+    "./react-router": {
+      "types": "./dist/routers/react-router.d.ts",
+      "default": "./dist/routers/react-router.js"
+    },
+    "./expo-router": {
+      "types": "./dist/routers/expo-router.d.ts",
+      "default": "./dist/routers/expo-router.js"
+    },
+    "./react-navigation": {
+      "types": "./dist/routers/react-navigation.d.ts",
+      "default": "./dist/routers/react-navigation.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "react-navigation/package.json",
+    "expo-router/package.json",
+    "react-router/package.json",
+    "next/package.json",
+    "core/package.json",
+    "native/package.json",
+    "web/package.json",
+    "src",
+    "!src/**/*.test.ts",
+    "!src/**/*.test.tsx",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && node scripts/subpaths.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run typecheck && npm run test && npm run api:check && npm run format:check",
+    "prepublishOnly": "npm run check && npm run build",
+    "api:check": "node scripts/api-surface.mjs",
+    "api:update": "node scripts/api-surface.mjs --update",
+    "changeset": "changeset",
+    "version-packages": "changeset version && npm run format",
+    "release": "npm run check && npm run build && changeset publish",
+    "check:package": "publint && attw --pack . --profile esm-only"
+  },
+  "keywords": [
+    "product-tour",
+    "onboarding",
+    "walkthrough",
+    "guided-tour",
+    "coach-marks",
+    "spotlight",
+    "react",
+    "nextjs",
+    "react-native",
+    "expo",
+    "typescript",
+    "product tour",
+    "user onboarding",
+    "guided tour",
+    "guided flows",
+    "tooltip",
+    "coachmarks",
+    "next.js"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "@react-navigation/native": ">=6",
+    "expo-router": ">=3",
+    "next": ">=13.4",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "react-native": ">=0.73",
+    "react-native-svg": ">=13",
+    "react-router": ">=6"
+  },
+  "peerDependenciesMeta": {
+    "@react-navigation/native": {
+      "optional": true
+    },
+    "expo-router": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    },
+    "react-router": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@changesets/cli": "^2.31.1",
+    "@react-navigation/native": "^7.5.0",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.2.3",
+    "expo-router": "^6.0.24",
+    "jsdom": "^25.0.1",
+    "next": "^15.5.27",
+    "prettier": "^3.9.9",
+    "publint": "^0.3.25",
+    "react": "^19.0.0",
+    "react-dom": "^19.2.0",
+    "react-native": "^0.81.0",
+    "react-native-svg": "^15.0.0",
+    "react-router": "^7.18.4",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  },
+  "homepage": "https://hintbeam.js.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CypherRatHQ/hintbeam.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CypherRatHQ/hintbeam/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
