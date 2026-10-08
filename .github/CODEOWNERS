@@ -1,0 +1,7 @@
+# Every change asks the maintainers for a review. Workflows, release config and security policy
+# change how code reaches users, so they are listed on their own to make that explicit.
+*                    @CypherRat
+/.github/            @CypherRat
+/.changeset/config.json @CypherRat
+/SECURITY.md         @CypherRat
+/package.json        @CypherRat
