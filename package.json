@@ -1,6 +1,6 @@
 {
   "name": "hintbeam",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Guided flows and product tours for React, Next.js and React Native. Tours that find their elements, follow users across pages, and never break when the app scrolls or moves.",
   "license": "MIT",
   "author": "CypherRat HQ (https://github.com/CypherRatHQ)",
