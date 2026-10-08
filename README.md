@@ -5,9 +5,9 @@ elements a tour may point at, and start a typed tour from any component.** Hintb
 library for product tours and guided flows: steps find their own elements, follow users across pages,
 and never point at empty space when the app scrolls or moves.
 
-> **Status: pre-release.** v0.1.0 is in development and not yet on npm. Everything below works today
-> from this repository. React Native support is a **preview**: it type-checks and shares the tested
-> core, but has not yet been run on a real iOS or Android device.
+> **Status: early (0.x).** Ready to use; the API may still change before 1.0, and every change is in
+> the [changelog](CHANGELOG.md). React Native support is a **preview**: it type-checks and shares the
+> tested core, but has not yet been run on a real iOS or Android device.
 
 ```sh
 npm install hintbeam
