@@ -38,12 +38,21 @@ function parse(file: string): Omit<Post, "slug"> {
   };
 }
 
+/** A post's URL comes from its file name, so only plain lowercase words and dashes are allowed. */
+function slugOf(file: string): string {
+  const slug = file.replace(/\.md$/, "");
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    throw new Error(`Blog post "${file}": name it with lowercase letters, digits and dashes only.`);
+  }
+  return slug;
+}
+
 /** Published posts, newest first. Files starting with `_` are drafts and stay off the site. */
 export function getPosts(): Post[] {
   if (!existsSync(DIR)) return [];
   return readdirSync(DIR)
     .filter((file) => file.endsWith(".md") && !file.startsWith("_"))
-    .map((file) => ({ slug: file.replace(/\.md$/, ""), ...parse(file) }))
+    .map((file) => ({ slug: slugOf(file), ...parse(file) }))
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 

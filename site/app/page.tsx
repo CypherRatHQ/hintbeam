@@ -1,4 +1,4 @@
-import { SITE } from "@/lib/site";
+import { SITE, jsonLd as ldJson } from "@/lib/site";
 import { Home } from "@/src/views/Home";
 
 // Structured data, so search engines and AI assistants know exactly what this is.
@@ -18,7 +18,7 @@ const jsonLd = {
 export default function Page() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }} />
       <Home />
     </>
   );

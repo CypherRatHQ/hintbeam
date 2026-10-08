@@ -8,10 +8,14 @@ export interface TocItem {
   depth: number;
 }
 
+/** Text without its tags. Any `<` or `>` left over (a stray, unclosed one) goes too. */
+const stripTags = (html: string) => html.replace(/<[^>]*>/g, "").replace(/[<>]/g, "");
+
+const escapeHtml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
 const slugify = (text: string) =>
-  text
+  stripTags(text)
     .toLowerCase()
-    .replace(/<[^>]+>/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
@@ -22,9 +26,11 @@ export function renderMarkdown(source: string): { html: string; toc: TocItem[] }
   renderer.heading = ({ tokens, depth }) => {
     const html = marked.Parser.parseInline(tokens);
     const id = slugify(html);
-    if (depth === 2 || depth === 3) toc.push({ id, text: html.replace(/<[^>]+>/g, ""), depth });
+    if (depth === 2 || depth === 3) toc.push({ id, text: stripTags(html), depth });
     return `<h${depth} id="${id}">${html}</h${depth}>`;
   };
+  // Raw HTML in a doc or post is shown as text, never run: content stays markdown only.
+  renderer.html = ({ text }) => escapeHtml(text);
   renderer.code = ({ text, lang }) => `<pre><code>${highlight(text, lang || "tsx")}</code></pre>`;
   const html = (marked.parse(source, { async: false, renderer }) as string).replace(
     /href="(?:\.\/)?([a-z-]+)\.md(#[^"]*)?"/g,

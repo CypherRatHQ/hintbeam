@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, getPosts } from "@/lib/blog";
 import { renderMarkdown } from "@/lib/markdown";
-import { SITE } from "@/lib/site";
+import { SITE, jsonLd as ldJson } from "@/lib/site";
 import { Prose } from "@/src/DocsBody";
 
 export const dynamicParams = false;
@@ -51,7 +51,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   };
   return (
     <div className="container blog-post">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }} />
       <Link href="/blog" className="blog-back">
         ← All posts
       </Link>

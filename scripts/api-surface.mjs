@@ -28,7 +28,7 @@ const OUT = resolve(root, "api/surface.txt");
 // kit, a router and their own code, so nothing there may have a generic name. Every export is a
 // hook (`use…`) or says "tour" — except these, which are already specific to Hintbeam.
 const APP_ENTRIES = ["hintbeam (web)", "hintbeam (react-native)"];
-const SPECIFIC = /^use[A-Z]|Tour|TOUR_/;
+const isSpecific = (name) => /^use[A-Z]/.test(name) || /Tour|TOUR_/.test(name);
 const ALLOWED = new Set([
   "defineTargets",
   "DefineTargetsOptions",
@@ -97,7 +97,7 @@ for (const [name, file] of Object.entries(ENTRIES)) {
   const normal = (text) => text.replace(/\s+/g, " ").replace(/,\s*([}\]])/g, " $1");
   for (const e of exports) lines.push(`${e.name}: ${normal(describe(e))}`);
   if (APP_ENTRIES.includes(name)) {
-    const generic = exports.map((e) => e.name).filter((n) => !SPECIFIC.test(n) && !ALLOWED.has(n));
+    const generic = exports.map((e) => e.name).filter((n) => !isSpecific(n) && !ALLOWED.has(n));
     if (generic.length) {
       console.error(
         `${name} exports names that could clash with other libraries: ${generic.join(", ")}.\n` +
