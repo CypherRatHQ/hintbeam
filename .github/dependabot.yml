@@ -14,6 +14,14 @@ updates:
       # Types for the oldest Node we support (package.json "engines"), so nothing newer slips in.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # Expo and React Native move together, one Expo SDK at a time. Upgrade them by hand once the
+      # new SDK is `latest` on npm: Dependabot can't tell Expo's prerelease SDKs from stable ones.
+      - dependency-name: "expo"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "expo-router"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-native"
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
   - package-ecosystem: npm
     directory: /site
     schedule: { interval: weekly }
