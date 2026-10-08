@@ -67,8 +67,8 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.build.json && node scripts/subpaths.mjs",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "rm -rf dist && node node_modules/typescript/bin/tsc -p tsconfig.build.json && node scripts/subpaths.mjs",
+    "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "format": "prettier --write .",
@@ -79,7 +79,6 @@
     "api:update": "node scripts/api-surface.mjs --update",
     "changeset": "changeset",
     "version-packages": "changeset version && npm run format",
-    "release": "npm run check && npm run build && changeset publish",
     "check:package": "publint && attw --pack . --profile esm-only"
   },
   "keywords": [
@@ -103,7 +102,7 @@
     "next.js"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "peerDependencies": {
     "@react-navigation/native": ">=6",
@@ -140,24 +139,26 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
-    "@changesets/cli": "^2.31.1",
+    "@changesets/cli": "^3.0.3",
     "@react-navigation/native": "^7.5.0",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^22.20.5",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.2.3",
-    "expo-router": "^6.0.24",
-    "jsdom": "^25.0.1",
-    "next": "^15.5.27",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@typescript/typescript6": "^6.0.2",
+    "expo": "^57.0.27",
+    "expo-router": "^57.0.25",
+    "jsdom": "^30.1.2",
+    "next": "^16.4.0",
     "prettier": "^3.9.9",
     "publint": "^0.3.25",
-    "react": "^19.0.0",
-    "react-dom": "^19.2.0",
-    "react-native": "^0.81.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-native": "^0.87.1",
     "react-native-svg": "^15.0.0",
-    "react-router": "^7.18.4",
-    "typescript": "^5.6.0",
-    "vitest": "^3.0.0"
+    "react-router": "^8.4.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
   },
   "homepage": "https://hintbeam.js.org",
   "repository": {

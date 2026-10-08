@@ -9,7 +9,8 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
+// TypeScript 7 has no stable JavaScript API yet, so this reads the code with TypeScript 6's.
+import ts from "@typescript/typescript6";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ENTRIES = {

@@ -119,7 +119,7 @@ TourProgressState: interface tours: readonly TourProgress[]
 TourProvider: const: { (props: TourProviderProps): JSX.Element; displayName: string; }
 TourProviderProps: interface children?: ReactNode labels?: Partial<TourLabels> | undefined onEvent?: ((event: TourEvent) => void) | undefined path?: "wave" | "strands" | "straight" | "elbow" | "arc" | (string & {}) | undefined plugins?: readonly TourPlugin[] | undefined renderStep?: ((step: TourStepView) => ReactNode) | null | undefined router?: TourRouter | undefined storage?: TourStorage | undefined targets: TourTargets<string> theme?: TourThemeInput | undefined tours?: readonly Tour<string>[] | undefined user?: TourUser | null | undefined
 TourRouter: interface currentScreen: () => string | null navigate: (screen: string) => void | Promise<void> subscribe: (listener: (screen: string | null) => void) => () => void
-TourScrollProps: interface onMomentumScrollEnd: () => void onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void onScrollEndDrag: () => void ref: RefObject<ScrollView | null> scrollEventThrottle: number
+TourScrollProps: interface onMomentumScrollEnd: () => void onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void onScrollEndDrag: () => void ref: RefObject<ScrollViewInstance | null> scrollEventThrottle: number
 TourStartCheck: interface completed: boolean platform: string tour: Tour<string> user: TourUser | null
 TourStartResult: type = PlayerStartResult | "blocked" | "unknown-tour" | "seen"
 TourState: interface index: number isFirst: boolean isLast: boolean step: TourStep<string> | null total: number tour: Tour<string> | null waitedTooLong: boolean

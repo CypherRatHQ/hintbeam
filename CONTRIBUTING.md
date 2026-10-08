@@ -10,7 +10,7 @@ npm install
 npm run check     # types, tests, public-API check, formatting
 ```
 
-Node 20 or newer. No global tools needed.
+Node 22 or newer. No global tools needed.
 
 ## Tests
 

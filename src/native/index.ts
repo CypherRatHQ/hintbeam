@@ -3,7 +3,7 @@
  * `import … from "hintbeam"` picks this automatically in React Native.
  */
 
-import { useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
+import { useCallback, useEffect, useMemo, useRef, type ComponentRef, type RefObject } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native";
 import type { ScrollArea } from "../core/registry.js";
 import { useTourContext } from "../react/context.js";
@@ -18,8 +18,11 @@ export { nativePlatform } from "./platform.js";
 /** Wrap your app once. See `TourProviderProps` for every option. */
 export const TourProvider = createTourProvider(nativePlatform);
 
+/** What a `ref` on a ScrollView holds, in every React Native version's types. */
+type ScrollViewRef = ComponentRef<typeof ScrollView>;
+
 export interface TourScrollProps {
-  ref: RefObject<ScrollView | null>;
+  ref: RefObject<ScrollViewRef | null>;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onMomentumScrollEnd: () => void;
   onScrollEndDrag: () => void;
@@ -38,7 +41,7 @@ export interface TourScrollProps {
  */
 export function useTourScroll(screen: string): TourScrollProps {
   const { registry, invalidate } = useTourContext("useTourScroll");
-  const ref = useRef<ScrollView | null>(null);
+  const ref = useRef<ScrollViewRef | null>(null);
   const offset = useRef(0);
 
   useEffect(() => {
