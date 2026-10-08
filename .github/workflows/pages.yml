@@ -19,10 +19,8 @@ on:
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+# Every job asks for only what it needs: the build reads the code, only the deploy can publish.
+permissions: {}
 
 concurrency:
   group: pages
@@ -31,18 +29,21 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            site/package-lock.json
-      - run: npm ci
+          persist-credentials: false
+      # No dependency cache: what gets deployed is built from a clean install only.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
       - working-directory: site
-        run: npm ci
+        run: npm ci --ignore-scripts
       # The site uses the packed library, exactly as someone installing it from npm would.
       - working-directory: site
         run: npm run lib
@@ -52,19 +53,23 @@ jobs:
           # Set the repository variable SITE_BASE_PATH to /hintbeam while the site is only at
           # <org>.github.io/hintbeam; delete it once hintbeam.js.org points here.
           SITE_BASE_PATH: ${{ vars.SITE_BASE_PATH }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site/out
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write # publish to GitHub Pages
+      id-token: write # prove to Pages which workflow is deploying
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
       # Tell search engines (Bing, and through it ChatGPT search; Yandex; others) the pages changed,
       # instead of waiting for a crawl. The key file is site/public/<key>.txt. Never fails a deploy.
       - name: IndexNow

@@ -1,16 +1,28 @@
-# Weekly dependency update pull requests. Nothing merges without a maintainer.
+# Dependency update pull requests. Nothing merges without a maintainer.
+#
+# cooldown: a new release is proposed only after it has been out for a week, so a broken or
+# hijacked release is usually caught and pulled before it reaches us. Security updates skip the wait.
 version: 2
 updates:
   - package-ecosystem: npm
     directory: /
     schedule: { interval: weekly }
+    cooldown: { default-days: 7 }
     groups:
       dev-dependencies: { dependency-type: development }
+    ignore:
+      # Types for the oldest Node we support (package.json "engines"), so nothing newer slips in.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: npm
     directory: /site
     schedule: { interval: weekly }
+    cooldown: { default-days: 7 }
     groups:
       site: { patterns: ["*"] }
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: monthly }
+    cooldown: { default-days: 7 }
+    groups:
+      actions: { patterns: ["*"] }

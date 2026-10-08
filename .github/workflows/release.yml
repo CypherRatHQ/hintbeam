@@ -1,45 +1,120 @@
 name: Release
 
-# Opens (or updates) a "Version packages" pull request from the changesets on main. Merging that
-# pull request publishes to npm and tags vX.Y.Z — two approvals: the merge, then the `npm`
-# environment, which must be set to require a maintainer's approval.
+# On every push to main, one of two things happens:
 #
-# Credentials: npm trusted publishing (OIDC) — no long-lived token. npm only lets a package that
-# already exists add a trusted publisher, so v0.1.0 is published once by hand (`npm publish` with
-# 2FA); then add this repository and `release.yml` as the trusted publisher on npmjs.com. Until
-# then, an NPM_TOKEN secret also works.
+# - There are changesets: open (or update) a "Version packages" pull request. Nothing is published.
+# - That pull request was merged: build and pack the package, then publish it to npm and tag vX.Y.Z
+#   once a maintainer approves the `npm` environment (set it to require a reviewer).
+#
+# So a release takes two approvals: merging the version pull request, then the `npm` environment.
+# Publishing uses npm trusted publishing (OIDC): there is no npm token anywhere. npm only lets a
+# package that already exists add a trusted publisher, so v0.1.0 is published once by hand; then
+# add this repository and `release.yml` (environment `npm`) as the trusted publisher on npmjs.com.
+#
+# Built after the Changesets maintainers' own setup: each job gets only the permissions it needs,
+# the package is packed in a job that cannot publish, and the publishing job runs none of our code
+# or our dependencies' install scripts, and uses no cache.
 
 on:
   push:
     branches: [main]
 
-concurrency: release-${{ github.ref }}
+permissions: {}
 
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  release:
+  select-mode:
     runs-on: ubuntu-latest
-    environment: npm
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      mode: ${{ steps.select-mode.outputs.mode }}
+      publish-plan-artifact-id: ${{ steps.select-mode.outputs.publish-plan-artifact-id }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - id: select-mode
+        uses: changesets/action/select-mode@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+
+  version:
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'version'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # commit the version changes
+      pull-requests: write # open the pull request
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - uses: changesets/action/version@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          script: npm run version-packages
+          commit-message: "chore: version packages"
+          pr-title: "Version packages"
+
+  pack:
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - run: npm audit signatures
+      - run: npm run check
+      - run: npm run build
+      - run: npm run check:package
+      - id: pack
+        uses: changesets/action/pack@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          publish-plan-artifact-id: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
+
+  publish:
+    needs: pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: npm
+    permissions:
+      contents: write # tag the release and create the GitHub release
+      id-token: write # npm trusted publishing, with provenance
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24 # npm 11: trusted publishing
-          cache: npm
+          package-manager-cache: false
           registry-url: https://registry.npmjs.org
-      - run: npm ci
-      - run: npm run check
-      - uses: changesets/action@v1
+      - run: npm ci --ignore-scripts
+      - uses: changesets/action/publish@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
-          version: npm run version-packages
-          publish: npm run release
-          commit: "chore: version packages"
-          title: "Version packages"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
+          pack-dir-artifact-id: ${{ needs.pack.outputs.pack-dir-artifact-id }}
+          create-github-releases: true
