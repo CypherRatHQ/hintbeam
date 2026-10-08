@@ -8,8 +8,16 @@ export interface TocItem {
   depth: number;
 }
 
-/** Text without its tags. Any `<` or `>` left over (a stray, unclosed one) goes too. */
-const stripTags = (html: string) => html.replace(/<[^>]*>/g, "").replace(/[<>]/g, "");
+/** Text without its tags: removed until none are left, then any stray `<` or `>` goes too. */
+function stripTags(html: string): string {
+  let text = html;
+  let previous;
+  do {
+    previous = text;
+    text = text.replace(/<[^>]*>/g, "");
+  } while (text !== previous);
+  return text.replace(/[<>]/g, "");
+}
 
 const escapeHtml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
