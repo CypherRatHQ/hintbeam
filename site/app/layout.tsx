@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { BASE_PATH, IS_PREVIEW, SITE } from "@/lib/site";
 import { SiteChrome } from "@/src/chrome";
+import { shareMeta } from "@/lib/meta";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -12,16 +13,8 @@ export const metadata: Metadata = {
   description: SITE.description,
   applicationName: SITE.name,
   keywords: ["product tour", "guided flows", "onboarding", "walkthrough", "React", "Next.js", "React Native", "Expo", "open source"],
+  ...shareMeta({ path: "/", title: SITE.title, description: SITE.description }),
   alternates: { canonical: "/", types: { "application/rss+xml": "/blog/rss.xml" } },
-  openGraph: {
-    type: "website",
-    siteName: SITE.name,
-    url: SITE.url,
-    title: SITE.title,
-    description: SITE.description,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: SITE.title }],
-  },
-  twitter: { card: "summary_large_image", title: SITE.title, description: SITE.description, images: ["/og.png"] },
   icons: { icon: `${BASE_PATH}/favicon.svg` },
   // A sub-path preview is temporary: only hintbeam.js.org should be indexed.
   ...(IS_PREVIEW ? { robots: { index: false, follow: false } } : {}),
