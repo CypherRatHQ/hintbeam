@@ -1,5 +1,5 @@
 ---
-title: "An onboarding tour for React Native with Expo Router or React Navigation (preview)"
+title: "React Native onboarding tour with Expo Router or React Navigation"
 description: "Add an onboarding tour to a React Native or Expo app with hintbeam and Expo Router or React Navigation. Preview: not yet tested on real devices."
 date: "2026-10-08"
 author: "Hintbeam team"

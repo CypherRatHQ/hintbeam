@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, getPosts } from "@/lib/blog";
 import { renderMarkdown } from "@/lib/markdown";
-import { SITE, jsonLd as ldJson } from "@/lib/site";
+import { SITE, jsonLd as ldJson, pageTitle } from "@/lib/site";
 import { Prose } from "@/src/DocsBody";
 
 export const dynamicParams = false;
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = getPost((await params).slug);
   if (!post) return {};
   return {
-    title: post.title,
+    title: pageTitle(post.title),
     description: post.description,
     authors: [{ name: post.author }],
     keywords: post.tags,

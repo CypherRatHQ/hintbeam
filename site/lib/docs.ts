@@ -52,7 +52,11 @@ export const DOC_GROUPS: { title: string; docs: Doc[] }[] = [
       ),
       doc("routers", "Routers", "Tours that follow people across pages with Next.js, React Router, Expo Router and React Navigation."),
       doc("plugins", "Plugins", "Send tour events to analytics, add custom light styles and extend Hintbeam with plugins."),
-      doc("accessibility", "Accessibility"),
+      doc(
+        "accessibility",
+        "Accessibility",
+        "How Hintbeam tours work for everyone: screen reader announcements, no focus stealing, real buttons, keyboard shortcuts and reduced motion.",
+      ),
     ],
   },
   {

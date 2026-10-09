@@ -90,4 +90,4 @@ jobs:
             site/package-lock.json
       - run: npm ci --ignore-scripts
       - working-directory: site
-        run: npm ci --ignore-scripts && npm audit signatures && npm run lib && npm run build
+        run: npm ci --ignore-scripts && npm audit signatures && npm run lib && npm run build && npm run check:seo
