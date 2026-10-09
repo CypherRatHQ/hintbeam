@@ -2,7 +2,7 @@
 title: "Introducing Hintbeam: product tours for React, Next.js, React Native"
 description: "Hintbeam is an MIT product-tour library for React, Next.js and React Native. Tours find their elements, follow users across pages, and are typed data."
 date: "2026-10-08"
-author: "Hintbeam team"
+author: "CypherRat"
 tags: ["announcement", "react", "nextjs", "react-native", "product-tours"]
 ---
 

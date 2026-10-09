@@ -22,8 +22,8 @@ import { TourProvider, createTourTheme } from "hintbeam";
 | `"minimal"` | An outline around the target and a card beside it, like a tooltip; no light or dimming | When the tour should barely be noticed |
 
 Change anything else with `overrides`:
-`createTourTheme({ brand, style: "subtle", overrides: { radius: 8, glow: 0.3 } })`. The playground on
-the playground has every control, and writes this code for you.
+`createTourTheme({ brand, style: "subtle", overrides: { radius: 8, glow: 0.3 } })`. The
+[playground](https://hintbeam.js.org/playground) has every control, and writes this code for you.
 
 ## Theme
 

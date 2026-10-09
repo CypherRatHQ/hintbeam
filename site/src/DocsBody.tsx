@@ -9,6 +9,15 @@ import { BASE_PATH } from "@/lib/site";
 export function Prose({ html }: { html: string }) {
   const router = useRouter();
   const onClick = (event: MouseEvent<HTMLElement>) => {
+    const copy = (event.target as HTMLElement).closest<HTMLButtonElement>(".code-copy");
+    if (copy) {
+      const code = copy.parentElement?.querySelector("pre")?.textContent ?? "";
+      void navigator.clipboard?.writeText(code).then(() => {
+        copy.textContent = "Copied";
+        setTimeout(() => (copy.textContent = "Copy"), 1400);
+      });
+      return;
+    }
     const href = (event.target as HTMLElement).closest("a")?.getAttribute("href");
     if (href?.startsWith("/") && !event.metaKey && !event.ctrlKey) {
       event.preventDefault();

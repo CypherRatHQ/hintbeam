@@ -13,6 +13,10 @@ and never point at empty space when the app scrolls or moves.
 npm install hintbeam
 ```
 
+Using Claude Code, Cursor or Copilot? Paste the prompt in
+[Using an AI coding agent?](docs/getting-started.md#using-an-ai-coding-agent) and it sets Hintbeam up
+for you, from the full docs at [hintbeam.js.org/llms-full.txt](https://hintbeam.js.org/llms-full.txt).
+
 ## Quick start (30 seconds)
 
 ```tsx
@@ -199,3 +203,5 @@ never checks a licence key or phones home.
 ## Licence
 
 MIT — every platform, router, path style and the plugin API. See [`LICENSE`](LICENSE).
+
+Maintained by [@CypherRat](https://github.com/CypherRat) at [CypherRat HQ](https://github.com/CypherRatHQ).

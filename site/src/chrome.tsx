@@ -10,6 +10,8 @@ import { CheckIcon, CloseIcon, CopyIcon, GitHubIcon, MenuIcon, Mark } from "./co
 import { eventLog } from "./eventLog";
 import { LANGUAGES, SettingsProvider, themeFor, useSettings } from "./settings";
 import { targets } from "./tours";
+import pkg from "hintbeam/package.json";
+import { MAINTAINER, ORG, SITE } from "@/lib/site";
 
 // Progress lives in localStorage; safe in the static build, where there is no window.
 const storage = browserTourStorage("hintbeam-site");
@@ -195,8 +197,14 @@ function Footer() {
           <a href="https://github.com/CypherRatHQ/hintbeam">GitHub</a>
           <Link href="/docs/versioning">Versioning</Link>
           <Link href="/docs/changelog">Changelog</Link>
-          <span style={{ display: "block", padding: "3px 0" }}>v0.1.0 · preview</span>
+          <a href={SITE.npm}>v{pkg.version} on npm</a>
         </div>
+      </div>
+      <div className="container footer-meta">
+        <span>
+          Made by <a href={MAINTAINER.url}>@{MAINTAINER.name}</a> at <a href={ORG.url}>{ORG.name}</a>
+        </span>
+        <span>MIT licence</span>
       </div>
     </footer>
   );

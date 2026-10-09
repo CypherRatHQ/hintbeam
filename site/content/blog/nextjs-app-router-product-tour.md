@@ -2,7 +2,7 @@
 title: "How to add a product tour to a Next.js App Router app"
 description: "Step-by-step: add a product tour to a Next.js App Router app with hintbeam. Client provider, tagged elements, first-visit tours and brand colours."
 date: "2026-10-08"
-author: "Hintbeam team"
+author: "CypherRat"
 tags: ["nextjs", "app-router", "tutorial", "product-tours", "onboarding"]
 ---
 

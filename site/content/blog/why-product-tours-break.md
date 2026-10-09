@@ -2,7 +2,7 @@
 title: "Why product tours break, and how Hintbeam handles it"
 description: "Tour steps point at empty space when elements scroll away, render late or live on another page. How Hintbeam measures and handles each case."
 date: "2026-10-08"
-author: "Hintbeam team"
+author: "CypherRat"
 tags: ["product-tours", "onboarding", "react", "react-native", "guides"]
 ---
 

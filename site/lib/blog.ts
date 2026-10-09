@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { MAINTAINER } from "./site";
 
 export interface Post {
   slug: string;
@@ -32,7 +33,7 @@ function parse(file: string): Omit<Post, "slug"> {
     title: String(data.title ?? file),
     description: String(data.description ?? ""),
     date: String(data.date ?? "1970-01-01"),
-    author: String(data.author ?? "Hintbeam team"),
+    author: String(data.author ?? MAINTAINER.name),
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     source: text.slice(match?.[0].length ?? 0),
   };
