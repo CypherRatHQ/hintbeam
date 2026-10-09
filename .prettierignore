@@ -15,3 +15,6 @@ site/package-lock.json
 /react-router/
 /expo-router/
 /react-navigation/
+
+# Search engine verification files: served byte for byte, never reformatted.
+site/public/google*.html
