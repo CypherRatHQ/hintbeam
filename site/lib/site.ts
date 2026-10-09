@@ -18,6 +18,10 @@ export const jsonLd = (data: unknown): string =>
 export const pageTitle = (title: string): string | { absolute: string } =>
   title.includes("Hintbeam") || `${title} · Hintbeam`.length > 60 ? { absolute: title } : title;
 
+/** Who writes and maintains Hintbeam: credited in the footer and as the author of posts. */
+export const MAINTAINER = { name: "CypherRat", url: "https://github.com/CypherRat" } as const;
+export const ORG = { name: "CypherRat HQ", url: "https://github.com/CypherRatHQ" } as const;
+
 /** What the playground is, for its search and link-preview description. */
 export const PLAYGROUND_DESCRIPTION =
   "Try Hintbeam on a small demo app: play a product tour across four pages, change the style, brand colour and language, and copy the theme into your app.";

@@ -31,7 +31,7 @@ an optional `advanceOn` — how it ends:
 | `"arrive"` | the user reaches the screen the target is on |
 | `{ event: "report.exported", timeout: 30 }` | your app calls `emit("report.exported")`. After `timeout` seconds (default 30) Next appears anyway, so nobody gets stuck |
 
-Text is plain words on one line (60 characters for a title, 160 for text). That keeps steps short —
+Text is plain words on one line (a title of 2–60 characters, text of 4–160). That keeps steps short —
 users skip long tours — and makes JSON from anywhere safe to show.
 
 ## Screens

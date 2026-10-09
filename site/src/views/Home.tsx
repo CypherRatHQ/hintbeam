@@ -8,6 +8,8 @@ import { HeroStage } from "@/src/components/HeroStage";
 import { ArrowRight, CheckIcon, CopyIcon, PlayIcon } from "@/src/components/Icons";
 import { BRANDS, presetRadius, STYLES, themeFor, useSettings } from "@/src/settings";
 import { siteTour } from "@/src/tours";
+import { BASE_PATH } from "@/lib/site";
+import pkg from "hintbeam/package.json";
 
 const DESCRIBE = `
 import { defineTargets, defineTour } from "hintbeam";
@@ -122,7 +124,7 @@ const HOW = [
   },
 ];
 
-export function Home() {
+export function Home({ agentPrompt }: { agentPrompt: string }) {
   const start = useTarget<HTMLButtonElement>("heroStart", { radius: 12 });
   const tour = useTour();
 
@@ -132,7 +134,7 @@ export function Home() {
         <div className="container">
           <div className="hero-copy">
             <Link href="/docs/changelog" className="announce">
-              <span className="tag">v0.1.0 preview</span>
+              <span className="tag">v{pkg.version}</span>
               <span>
                 What's new<span className="long">: styles, brand colours and the three-strand light</span>
               </span>
@@ -187,7 +189,7 @@ export function Home() {
       <Different />
       <Places />
       <Features />
-      <How />
+      <How agentPrompt={agentPrompt} />
       <Questions />
       <OpenCore />
 
@@ -603,7 +605,7 @@ function Features() {
 
 /* ——— How it works ——— */
 
-function How() {
+function How({ agentPrompt }: { agentPrompt: string }) {
   const [active, setActive] = useState(0);
   const step = HOW[active]!;
   return (
@@ -627,6 +629,16 @@ function How() {
             ))}
           </div>
           <CodeTabs key={active} tabs={step.tabs} />
+        </div>
+        <div className="agent-prompt">
+          <div>
+            <h3>Or let your coding agent do it.</h3>
+            <p>
+              Paste this into Claude Code, Cursor, Copilot or any coding agent. It reads the full docs from{" "}
+              <a href={`${BASE_PATH}/llms-full.txt`}>llms-full.txt</a> and does the four steps in your app.
+            </p>
+          </div>
+          <Code code={agentPrompt} language="text" title="Prompt for your coding agent" wrap />
         </div>
       </div>
     </section>

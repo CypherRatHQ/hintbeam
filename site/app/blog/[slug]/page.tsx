@@ -4,7 +4,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, getPosts } from "@/lib/blog";
 import { renderMarkdown } from "@/lib/markdown";
-import { SITE, jsonLd as ldJson, pageTitle } from "@/lib/site";
+import { MAINTAINER, SITE, jsonLd as ldJson, pageTitle } from "@/lib/site";
+
+const authorUrl = (name: string) => (name === MAINTAINER.name ? MAINTAINER.url : undefined);
 import { Prose } from "@/src/DocsBody";
 
 export const dynamicParams = false;
@@ -21,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: pageTitle(post.title),
     description: post.description,
-    authors: [{ name: post.author }],
+    authors: [{ name: post.author, url: authorUrl(post.author) }],
     keywords: post.tags,
     ...shareMeta({
       path: `/blog/${post.slug}`,
@@ -44,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    author: { "@type": "Organization", name: post.author },
+    author: { "@type": "Person", name: post.author, url: authorUrl(post.author) },
     publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
     mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
     keywords: post.tags.join(", "),
@@ -66,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           })}
         </time>
         {" · "}
-        {post.author}
+        {authorUrl(post.author) ? <a href={authorUrl(post.author)}>{post.author}</a> : post.author}
       </p>
       <Prose html={html} />
     </div>

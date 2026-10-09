@@ -4,6 +4,12 @@
   "description": "Guided flows and product tours for React, Next.js and React Native. Tours that find their elements, follow users across pages, and never break when the app scrolls or moves.",
   "license": "MIT",
   "author": "CypherRat HQ (https://github.com/CypherRatHQ)",
+  "contributors": [
+    {
+      "name": "CypherRat",
+      "url": "https://github.com/CypherRat"
+    }
+  ],
   "type": "module",
   "sideEffects": false,
   "main": "./dist/web/index.js",

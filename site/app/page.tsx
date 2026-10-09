@@ -1,4 +1,5 @@
 import { SITE, jsonLd as ldJson } from "@/lib/site";
+import { agentPrompt } from "@/lib/docs";
 import { Home } from "@/src/views/Home";
 
 // Structured data, so search engines and AI assistants know exactly what this is.
@@ -19,7 +20,7 @@ export default function Page() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }} />
-      <Home />
+      <Home agentPrompt={agentPrompt()} />
     </>
   );
 }

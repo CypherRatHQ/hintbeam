@@ -1,6 +1,6 @@
 import { marked } from "marked";
 import { highlight } from "./highlight";
-import { BASE_PATH } from "./site";
+import { BASE_PATH, SITE } from "./site";
 
 export interface TocItem {
   id: string;
@@ -39,11 +39,13 @@ export function renderMarkdown(source: string): { html: string; toc: TocItem[] }
   };
   // Raw HTML in a doc or post is shown as text, never run: content stays markdown only.
   renderer.html = ({ text }) => escapeHtml(text);
-  renderer.code = ({ text, lang }) => `<pre><code>${highlight(text, lang || "tsx")}</code></pre>`;
-  const html = (marked.parse(source, { async: false, renderer }) as string).replace(
-    /href="(?:\.\/)?([a-z-]+)\.md(#[^"]*)?"/g,
-    (_, slug: string, hash = "") => `href="${BASE_PATH}/docs/${slug}${hash}"`,
-  );
+  renderer.code = ({ text, lang }) =>
+    `<div class="code-block"><button type="button" class="code-copy" aria-label="Copy code">Copy</button>` +
+    // Plain text (such as a prompt) wraps; code keeps its lines and scrolls.
+    `<pre${lang === "text" ? ' class="wrap"' : ""}><code>${highlight(text, lang || "tsx")}</code></pre></div>`;
+  const html = (marked.parse(source, { async: false, renderer }) as string)
+    .replace(/href="(?:\.\/)?([a-z-]+)\.md(#[^"]*)?"/g, (_, slug: string, hash = "") => `href="${BASE_PATH}/docs/${slug}${hash}"`)
+    .replace(/href="\.\.\/([^"]+)"/g, (_, path: string) => `href="${SITE.repo}/blob/main/${path}"`);
   return { html, toc };
 }
 

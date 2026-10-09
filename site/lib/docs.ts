@@ -71,3 +71,13 @@ export const DOC_GROUPS: { title: string; docs: Doc[] }[] = [
 ];
 
 export const DOCS = DOC_GROUPS.flatMap((group) => group.docs);
+
+/**
+ * The prompt people paste into a coding agent, from "Using an AI coding agent?" in the getting
+ * started guide — the one place it is written, so the home page and the docs never disagree.
+ */
+export function agentPrompt(): string {
+  const prompt = read("docs/getting-started.md").match(/## Using an AI coding agent\?[\s\S]*?```text\n([\s\S]*?)```/)?.[1];
+  if (!prompt) throw new Error('docs/getting-started.md: the "Using an AI coding agent?" prompt is missing.');
+  return prompt.trim();
+}

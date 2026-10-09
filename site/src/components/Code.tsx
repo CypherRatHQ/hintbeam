@@ -25,7 +25,18 @@ export function CopyButton({ text }: { text: string }) {
   );
 }
 
-export function Code({ code, language = "tsx", title }: { code: string; language?: string; title?: string }) {
+export function Code({
+  code,
+  language = "tsx",
+  title,
+  wrap = false,
+}: {
+  code: string;
+  language?: string;
+  title?: string;
+  /** Wrap long lines instead of scrolling: for prose, such as a prompt. */
+  wrap?: boolean;
+}) {
   const text = code.trim();
   const html = useMemo(() => highlight(text, language), [text, language]);
   return (
@@ -34,7 +45,7 @@ export function Code({ code, language = "tsx", title }: { code: string; language
         <span>{title ?? language}</span>
         <CopyButton text={text} />
       </div>
-      <pre>
+      <pre className={wrap ? "wrap" : undefined}>
         <code dangerouslySetInnerHTML={{ __html: html }} />
       </pre>
     </div>
