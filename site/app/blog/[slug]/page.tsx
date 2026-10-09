@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { shareMeta } from "@/lib/meta";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, getPosts } from "@/lib/blog";
@@ -22,15 +23,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: post.description,
     authors: [{ name: post.author }],
     keywords: post.tags,
-    alternates: { canonical: `/blog/${post.slug}` },
-    openGraph: {
-      type: "article",
+    ...shareMeta({
+      path: `/blog/${post.slug}`,
       title: post.title,
       description: post.description,
+      image: `/og/blog-${post.slug}.png`,
+      type: "article",
       publishedTime: post.date,
-      url: `/blog/${post.slug}`,
-      images: ["/og.png"],
-    },
+    }),
   };
 }
 

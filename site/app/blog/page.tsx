@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPosts } from "@/lib/blog";
+import { shareMeta } from "@/lib/meta";
 import { BASE_PATH } from "@/lib/site";
+
+const DESCRIPTION =
+  "Guides, release notes and the thinking behind Hintbeam — product tours and guided flows for React, Next.js and React Native.";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description:
-    "Guides, release notes and the thinking behind Hintbeam — product tours and guided flows for React, Next.js and React Native.",
-  alternates: { canonical: "/blog" },
+  description: DESCRIPTION,
+  ...shareMeta({ path: "/blog", title: "Blog · Hintbeam", description: DESCRIPTION }),
 };
 
 const formatDate = (date: string) =>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { shareMeta } from "@/lib/meta";
 import { notFound } from "next/navigation";
 import { DOCS } from "@/lib/docs";
 import { DocPage } from "../DocPage";
@@ -16,14 +17,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: doc.title,
     description: doc.description,
-    alternates: { canonical: `/docs/${doc.slug}` },
-    openGraph: {
-      type: "article",
+    ...shareMeta({
+      path: `/docs/${doc.slug}`,
       title: `${doc.title} · Hintbeam docs`,
       description: doc.description,
-      url: `/docs/${doc.slug}`,
-      images: ["/og.png"],
-    },
+      image: `/og/docs-${doc.slug}.png`,
+      type: "article",
+    }),
   };
 }
 

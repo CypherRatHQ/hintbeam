@@ -18,6 +18,10 @@ export const jsonLd = (data: unknown): string =>
 export const pageTitle = (title: string): string | { absolute: string } =>
   title.includes("Hintbeam") || `${title} · Hintbeam`.length > 60 ? { absolute: title } : title;
 
+/** What the playground is, for its search and link-preview description. */
+export const PLAYGROUND_DESCRIPTION =
+  "Try Hintbeam on a small demo app: play a product tour across four pages, change the style, brand colour and language, and copy the theme into your app.";
+
 /** Facts about the site used in metadata, the sitemap, feeds and llms.txt. */
 export const SITE = {
   name: "Hintbeam",
