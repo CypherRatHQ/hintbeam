@@ -9,6 +9,15 @@ import { join, relative } from "node:path";
 const OUT = new URL("../out/", import.meta.url).pathname;
 const SKIP = new Set(["404.html", "_not-found.html"]);
 const SITE = "https://hintbeam.js.org";
+/** The URL's path when it is exactly on the site (same origin, not a look-alike host), else null. */
+const onSite = (value) => {
+  try {
+    const url = new URL(value);
+    return url.origin === SITE ? decodeURIComponent(url.pathname) : null;
+  } catch {
+    return null;
+  }
+};
 const pngIs1200x630 = (file) => {
   const head = readFileSync(file).subarray(0, 24);
   return head.toString("latin1", 1, 4) === "PNG" && head.readUInt32BE(16) === 1200 && head.readUInt32BE(20) === 630;
@@ -36,7 +45,7 @@ for (const file of pages(OUT)) {
 
   const meta = (key) => decode(html.match(new RegExp(`<meta (?:property|name)="${key}" content="([^"]*)"`))?.[1] ?? "");
   const canonical = html.match(/<link rel="canonical" href="([^"]*)"/)?.[1] ?? "";
-  if (!canonical.startsWith(SITE)) problems.push(`${page}: canonical URL is "${canonical}"`);
+  if (onSite(canonical) === null) problems.push(`${page}: canonical URL is "${canonical}"`);
   if (meta("og:url") !== canonical) problems.push(`${page}: og:url "${meta("og:url")}" is not its canonical URL "${canonical}"`);
   for (const key of ["og:title", "og:description", "og:site_name", "twitter:title", "twitter:description"]) {
     if (!meta(key)) problems.push(`${page}: ${key} is missing`);
@@ -44,7 +53,8 @@ for (const file of pages(OUT)) {
   if (meta("twitter:card") !== "summary_large_image") problems.push(`${page}: twitter:card is not summary_large_image`);
   for (const key of ["og:image", "twitter:image"]) {
     const image = meta(key);
-    const file = image.startsWith(SITE) ? join(OUT, image.slice(SITE.length)) : "";
+    const path = onSite(image);
+    const file = path === null ? "" : join(OUT, path);
     if (!file || !existsSync(file)) problems.push(`${page}: ${key} "${image}" is not a file in the build`);
     else if (!pngIs1200x630(file)) problems.push(`${page}: ${key} "${image}" is not a 1200×630 PNG`);
   }
