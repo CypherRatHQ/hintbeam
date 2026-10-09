@@ -6,13 +6,9 @@ import { join, relative } from "node:path";
 
 const OUT = new URL("../out/", import.meta.url).pathname;
 const SKIP = new Set(["404.html", "_not-found.html"]);
-const decode = (s) =>
-  s
-    .replace(/&amp;/g, "&")
-    .replace(/&quot;/g, '"')
-    .replace(/&#x27;|&#39;/g, "'")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">");
+// One pass, so "&amp;quot;" stays "&quot;" instead of being decoded twice.
+const ENTITIES = { amp: "&", quot: '"', "#x27": "'", "#39": "'", lt: "<", gt: ">" };
+const decode = (s) => s.replace(/&(amp|quot|#x27|#39|lt|gt);/g, (_, name) => ENTITIES[name]);
 
 const pages = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
