@@ -163,7 +163,7 @@ Supported versions: React ≥ 18, Next.js ≥ 13.4 (App Router), React Native �
 Tutorials:
 
 - [How to add a product tour to a Next.js App Router app](site/content/blog/nextjs-app-router-product-tour.md)
-- [An onboarding tour for React Native with Expo Router or React Navigation](site/content/blog/react-native-onboarding-tour.md) (preview)
+- [React Native onboarding tour with Expo Router or React Navigation](site/content/blog/react-native-onboarding-tour.md) (preview)
 - [Why product tours break, and how Hintbeam handles it](site/content/blog/why-product-tours-break.md)
 
 The website in [`site/`](site) (Next.js, static export) is built with Hintbeam itself:

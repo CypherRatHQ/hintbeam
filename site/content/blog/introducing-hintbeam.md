@@ -1,5 +1,5 @@
 ---
-title: "Introducing Hintbeam: product tours for React, Next.js and React Native"
+title: "Introducing Hintbeam: product tours for React, Next.js, React Native"
 description: "Hintbeam is an MIT product-tour library for React, Next.js and React Native. Tours find their elements, follow users across pages, and are typed data."
 date: "2026-10-08"
 author: "Hintbeam team"
@@ -129,6 +129,6 @@ npm install hintbeam
 Then read [Getting started](https://github.com/CypherRatHQ/hintbeam/blob/main/docs/getting-started.md), or follow one of the tutorials:
 
 - [Add a product tour to a Next.js App Router app](/blog/nextjs-app-router-product-tour)
-- [An onboarding tour for React Native with Expo Router or React Navigation](/blog/react-native-onboarding-tour) (preview)
+- [React Native onboarding tour with Expo Router or React Navigation](/blog/react-native-onboarding-tour) (preview)
 
 The code is at [github.com/CypherRatHQ/hintbeam](https://github.com/CypherRatHQ/hintbeam). Issues and pull requests are welcome, and accessibility problems are treated as bugs.

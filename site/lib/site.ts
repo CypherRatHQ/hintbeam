@@ -11,6 +11,13 @@ export const IS_PREVIEW = BASE_PATH !== "";
 export const jsonLd = (data: unknown): string =>
   JSON.stringify(data).replace(/[<>&]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, "0")}`);
 
+/**
+ * A page's <title>: "Page · Hintbeam", unless the page already names Hintbeam or the suffix would
+ * push it past 60 characters (search results cut longer titles off).
+ */
+export const pageTitle = (title: string): string | { absolute: string } =>
+  title.includes("Hintbeam") || `${title} · Hintbeam`.length > 60 ? { absolute: title } : title;
+
 /** Facts about the site used in metadata, the sitemap, feeds and llms.txt. */
 export const SITE = {
   name: "Hintbeam",
@@ -18,6 +25,8 @@ export const SITE = {
   repo: "https://github.com/CypherRatHQ/hintbeam",
   npm: "https://www.npmjs.com/package/hintbeam",
   tagline: "Guided flows and product tours for React, Next.js and React Native",
+  /** The home page title: at most 60 characters, so search results show it whole. */
+  title: "Hintbeam: product tours for React, Next.js and React Native",
   description:
-    "Hintbeam is an open-source product tour library for React, Next.js and React Native. Tours point at named targets, not CSS selectors, so they survive refactors, scrolling and page changes.",
+    "Open-source product tours for React, Next.js and React Native. Tours point at named targets, not CSS selectors, so they survive refactors and page changes.",
 } as const;
