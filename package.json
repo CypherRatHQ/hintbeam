@@ -110,15 +110,9 @@
     "react-tour",
     "onboarding-tour",
     "app-tour",
-    "user-guide",
     "feature-discovery",
-    "coachmark",
-    "tooltip-tour",
-    "walkthrough-tour",
-    "react-hooks",
     "expo-router",
-    "react-navigation",
-    "app-router"
+    "react-navigation"
   ],
   "engines": {
     "node": ">=22"
