@@ -15,7 +15,14 @@ export const metadata: Metadata = {
   keywords: ["product tour", "guided flows", "onboarding", "walkthrough", "React", "Next.js", "React Native", "Expo", "open source"],
   ...shareMeta({ path: "/", title: SITE.title, description: SITE.description }),
   alternates: { canonical: "/", types: { "application/rss+xml": "/blog/rss.xml" } },
-  icons: { icon: `${BASE_PATH}/favicon.svg` },
+  icons: {
+    icon: [
+      { url: `${BASE_PATH}/favicon.ico`, sizes: "48x48" },
+      { url: `${BASE_PATH}/favicon.svg`, type: "image/svg+xml" },
+      { url: `${BASE_PATH}/icon-192.png`, sizes: "192x192", type: "image/png" },
+    ],
+    apple: { url: `${BASE_PATH}/apple-touch-icon.png`, sizes: "180x180" },
+  },
   // A sub-path preview is temporary: only hintbeam.js.org should be indexed.
   ...(IS_PREVIEW ? { robots: { index: false, follow: false } } : {}),
 };
