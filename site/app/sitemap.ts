@@ -10,8 +10,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     page("", 1),
     page("/playground", 0.8),
-    ...DOCS.map((doc) => page(`/docs/${doc.slug}`, doc.slug === "getting-started" ? 0.9 : 0.7)),
+    ...DOCS.map((doc) => page(`/docs/${doc.slug}`, doc.slug === "getting-started" ? 0.9 : 0.7, doc.updated)),
     page("/blog", 0.6),
-    ...getPosts().map((post) => page(`/blog/${post.slug}`, 0.6, post.date)),
+    ...getPosts().map((post) => page(`/blog/${post.slug}`, 0.6, post.updated)),
   ];
 }

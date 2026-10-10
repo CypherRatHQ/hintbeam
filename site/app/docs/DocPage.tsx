@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DOC_GROUPS, DOCS, type Doc } from "@/lib/docs";
 import { renderMarkdown } from "@/lib/markdown";
+import { PUBLISHER, SITE, breadcrumbs, jsonLd } from "@/lib/site";
 import { Prose, Toc } from "@/src/DocsBody";
 
 /** One docs page, rendered to HTML at build time. */
@@ -9,8 +10,32 @@ export function DocPage({ doc }: { doc: Doc }) {
   const index = DOCS.indexOf(doc);
   const previous = DOCS[index - 1];
   const next = DOCS[index + 1];
+  const url = `${SITE.url}/docs/${doc.slug}`;
+  const structured = [
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      headline: doc.searchTitle,
+      description: doc.description,
+      url,
+      mainEntityOfPage: url,
+      image: `${SITE.url}/og/docs-${doc.slug}.png`,
+      ...(doc.updated ? { dateModified: doc.updated } : {}),
+      author: PUBLISHER,
+      publisher: PUBLISHER,
+      about: { "@type": "SoftwareSourceCode", name: SITE.name, codeRepository: SITE.repo },
+    },
+    {
+      "@context": "https://schema.org",
+      ...breadcrumbs([
+        { name: "Docs", path: "/docs" },
+        { name: doc.title, path: `/docs/${doc.slug}` },
+      ]),
+    },
+  ];
   return (
     <div className="container docs">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(structured) }} />
       <aside className="docs-nav" aria-label="Documentation">
         {DOC_GROUPS.map((group) => (
           <div key={group.title}>

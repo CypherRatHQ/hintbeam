@@ -38,3 +38,22 @@ export const SITE = {
   description:
     "Open-source product tours for React, Next.js and React Native. Tours point at named targets, not CSS selectors, so they survive refactors and page changes.",
 } as const;
+
+/** The site as the publisher of its docs and posts, with its logo, for structured data. */
+export const PUBLISHER = {
+  "@type": "Organization",
+  name: SITE.name,
+  url: SITE.url,
+  logo: { "@type": "ImageObject", url: `${SITE.url}/icon-512.png`, width: 512, height: 512 },
+} as const;
+
+/** A BreadcrumbList for structured data: the trail from the home page to this page. */
+export const breadcrumbs = (trail: { name: string; path: string }[]) => ({
+  "@type": "BreadcrumbList",
+  itemListElement: [{ name: SITE.name, path: "" }, ...trail].map((crumb, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: crumb.name,
+    item: `${SITE.url}${crumb.path}`,
+  })),
+});
