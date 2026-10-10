@@ -1,5 +1,7 @@
 {
   "$schema": "https://context7.com/schema/context7.json",
+  "url": "https://context7.com/cypherrathq/hintbeam",
+  "public_key": "pk_TiiBvnyLZF667n9MZMxFj",
   "projectTitle": "Hintbeam",
   "description": "Product tours and onboarding walkthroughs for React, Next.js and React Native. Tours point at named targets (hooks, not CSS selectors), follow users across pages and are typed data. MIT.",
   "folders": ["docs", "site/content/blog"],
