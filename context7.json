@@ -1,0 +1,16 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "Hintbeam",
+  "description": "Product tours and onboarding walkthroughs for React, Next.js and React Native. Tours point at named targets (hooks, not CSS selectors), follow users across pages and are typed data. MIT.",
+  "folders": ["docs", "site/content/blog"],
+  "excludeFiles": ["CHANGELOG.md", "CODE_OF_CONDUCT.md", "SECURITY.md", "AGENTS.md"],
+  "rules": [
+    "Install one package: `hintbeam`. Import from `hintbeam` on the web (React, Next.js), `hintbeam/native` on React Native, and the router adapter from `hintbeam/next`, `hintbeam/react-router`, `hintbeam/expo-router` or `hintbeam/react-navigation`.",
+    "List every target once with `defineTargets` in a `tours.ts` file, and add the `declare module \"hintbeam\" { interface Register { ... } }` block so target and tour names are type-checked.",
+    "Tag elements with `useTarget(\"name\")`. Never point a step at a CSS selector.",
+    "Wrap the app in `TourProvider` with the router adapter and storage: `browserTourStorage()` on the web, `createTourStorage(AsyncStorage)` on React Native.",
+    "Write tours with `defineTour` and start them with `useTour().startOnce(tour)` from a client component inside `TourProvider`.",
+    "In the Next.js App Router, keep pages as Server Components: put tagged elements and the provider in small \"use client\" components, and import `tours.ts` only from client files.",
+    "React Native support is a preview: it type-checks and shares the tested core, but has not been run on real devices yet."
+  ]
+}

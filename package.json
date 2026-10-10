@@ -1,7 +1,7 @@
 {
   "name": "hintbeam",
   "version": "0.1.0",
-  "description": "Guided flows and product tours for React, Next.js and React Native. Tours that find their elements, follow users across pages, and never break when the app scrolls or moves.",
+  "description": "Product tours and onboarding walkthroughs for React, Next.js and React Native. Typed tours that point at named targets, follow users across pages and survive refactors.",
   "license": "MIT",
   "author": "CypherRat HQ (https://github.com/CypherRatHQ)",
   "contributors": [
@@ -105,7 +105,20 @@
     "guided flows",
     "tooltip",
     "coachmarks",
-    "next.js"
+    "next.js",
+    "tour",
+    "react-tour",
+    "onboarding-tour",
+    "app-tour",
+    "user-guide",
+    "feature-discovery",
+    "coachmark",
+    "tooltip-tour",
+    "walkthrough-tour",
+    "react-hooks",
+    "expo-router",
+    "react-navigation",
+    "app-router"
   ],
   "engines": {
     "node": ">=22"
