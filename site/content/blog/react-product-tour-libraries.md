@@ -14,7 +14,7 @@ This post compares the libraries people actually install, on the four questions 
 
 ## The four questions
 
-1. **Can you use it for free in a commercial product?** Two of these libraries are AGPL-3.0 and sell a commercial licence. That matters if your company makes money.
+1. **What licence is it under?** Most are MIT. Two are dual-licensed, AGPL-3.0 or a commercial licence, which matters if you use them in a commercial product.
 2. **Does it support React 19?** That means it lists React 19 in its peer dependencies.
 3. **How does a step find its element?** By CSS selector, by DOM element or ref, or by a name you attach in your components.
 4. **Can a tour cross pages?** In a router-based app, a tour usually wants to walk someone from the dashboard to the settings page.
@@ -25,9 +25,9 @@ This post compares the libraries people actually install, on the four questions 
 | --- | --- | --- | --- |
 | [React Joyride](https://react-joyride.com) | MIT | 3.2.0, Jul 2026 | 1.39M |
 | [Driver.js](https://driverjs.com) | MIT | 1.9.0, Oct 2026 | 2.31M |
-| [Shepherd.js](https://shepherdjs.dev) | **AGPL-3.0 or paid** | 15.3.0, Aug 2026 | 337k |
-| react-shepherd | **AGPL-3.0 or paid** | 7.0.6, Aug 2026 | 32k |
-| [Intro.js](https://introjs.com) | **AGPL-3.0 or paid** | 8.6.0, Sep 2026 | 179k |
+| [Shepherd.js](https://shepherdjs.dev) | AGPL-3.0 or commercial | 15.3.0, Aug 2026 | 337k |
+| react-shepherd | AGPL-3.0 or commercial | 7.0.6, Aug 2026 | 32k |
+| [Intro.js](https://introjs.com) | AGPL-3.0 or commercial | 8.6.0, Sep 2026 | 179k |
 | [Reactour](https://github.com/elrumordelaluz/reactour) (`@reactour/tour`) | MIT | 3.8.0, May 2025 | 191k |
 | [NextStep](https://nextstepjs.com) | MIT | 2.3.0, Jul 2026 | 70k |
 | [Onborda](https://github.com/uixmat/onborda) | MIT | 1.2.5, Dec 2024 | 29k |
@@ -50,7 +50,7 @@ A few things stand out.
 
 **Driver.js and React Joyride are the most downloaded**, by a wide margin. Driver.js has no framework dependency and works anywhere there is a DOM. React Joyride is built for React, and its v3, released in March 2026, accepts refs as targets and supports React 19.
 
-**Shepherd.js and Intro.js are not free for most companies.** Both are AGPL-3.0, with a paid commercial licence. Shepherd moved from MIT to AGPL at version 14.0.1 in October 2024. We cover what that means in [Shepherd.js and Intro.js are AGPL: what that means for your app](/blog/shepherd-intro-js-agpl-licence).
+**Shepherd.js and Intro.js are dual-licensed.** Each is available under AGPL-3.0 or a commercial licence. Shepherd moved from MIT to this model at version 14.0.1, in October 2024. Their licence files, [Shepherd](https://github.com/shipshapecode/shepherd/blob/main/LICENSE.md) and [Intro.js](https://github.com/usablica/intro.js/blob/master/license.md), say when you need the commercial licence.
 
 **Check release dates.** Reactour's last release was in May 2025, and Onborda's in December 2024.
 
@@ -66,17 +66,17 @@ This matters more than it looks. A tour step has to find a button that you wrote
 
 ## Which one should you use?
 
-- **You want the most used, battle-tested React library:** **React Joyride.** v3 fixed the React 19 problems that many older blog posts still describe. Its multi-route recipe works if you're comfortable driving navigation yourself.
+- **You want the most used, battle-tested React library:** **React Joyride.** v3 fixed the React 19 problems that some older posts still describe. Its multi-route recipe works if you're comfortable driving navigation yourself.
 - **You want something framework-free, or your app isn't all React:** **Driver.js.** It is MIT, very popular and actively released.
 - **You build with Next.js and want routing handled:** look at **NextStep** and **Hintbeam**. Both navigate between pages for you. For Hintbeam, see [How to add a product tour to a Next.js App Router app](/blog/nextjs-app-router-product-tour).
-- **You're a company and considering Shepherd or Intro.js:** budget for the commercial licence. It is a one-time payment, from $50 for Shepherd and $9.99 for Intro.js, but read the terms first.
+- **You're considering Shepherd or Intro.js for a commercial product:** read their licence files first, and check whether you need their commercial licence.
 - **You need the same tours on the web and in React Native:** this is what Hintbeam was written for. One package, one tour definition, on the web and in React Native. Be aware that Hintbeam is new (0.x), and its React Native support is a preview that has not yet been run on real devices.
-- **You want analytics, a no-code editor and A/B tests, and have budget:** a hosted tool such as Appcues, Userpilot, Chameleon or UserGuiding, which charge a monthly subscription.
+- **You want analytics, a no-code editor and A/B tests, and have budget:** a hosted tool such as Appcues, Userpilot, Chameleon or UserGuiding, which charge a subscription.
 
 ## What we checked, and how
 
 - Licences, versions, release dates and React peer ranges come from the npm registry (`registry.npmjs.org/<package>`), checked 10 October 2026.
-- Shepherd's and Intro.js's licence terms come from their licence files, [Shepherd LICENSE.md](https://github.com/shipshapecode/shepherd/blob/main/LICENSE.md) and [Intro.js license.md](https://github.com/usablica/intro.js/blob/master/license.md), and from their pricing pages.
+- Shepherd's and Intro.js's licence terms come from their licence files, [Shepherd LICENSE.md](https://github.com/shipshapecode/shepherd/blob/main/LICENSE.md) and [Intro.js license.md](https://github.com/usablica/intro.js/blob/master/license.md).
 - Routing support comes from each project's docs: [React Joyride recipes](https://react-joyride.com/docs/recipes), [Driver.js multi-page tours](https://driverjs.com/docs/multi-page-tour), [NextStep routing](https://nextstepjs.com/docs/nextjs/routing) and the [Onborda README](https://github.com/uixmat/onborda).
 - Weekly downloads come from `api.npmjs.org` for 2–8 October 2026.
 
