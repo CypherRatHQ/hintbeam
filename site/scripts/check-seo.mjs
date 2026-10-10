@@ -3,6 +3,8 @@
 //   of 50–160.
 // - Link previews: Open Graph and X tags naming the page's own URL (its canonical one), title,
 //   description and a 1200×630 PNG that exists in the build.
+// - Site identity: the home page names the site (WebSite structured data), and every icon a page
+//   links to is in the build, with /favicon.ico, so results show Hintbeam's name and icon.
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 
@@ -51,6 +53,16 @@ for (const file of pages(OUT)) {
     if (!meta(key)) problems.push(`${page}: ${key} is missing`);
   }
   if (meta("twitter:card") !== "summary_large_image") problems.push(`${page}: twitter:card is not summary_large_image`);
+  for (const [, href] of html.matchAll(/<link rel="(?:icon|apple-touch-icon|manifest)" href="([^"]*)"/g)) {
+    if (!existsSync(join(OUT, decode(href)))) problems.push(`${page}: icon "${href}" is not a file in the build`);
+  }
+  if (page === "index.html") {
+    const site = [...html.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)]
+      .map(([, json]) => JSON.parse(json))
+      .find((data) => data["@type"] === "WebSite");
+    if (site?.name !== "Hintbeam" || site?.url !== `${SITE}/`)
+      problems.push(`${page}: no WebSite structured data naming Hintbeam at ${SITE}/ (search results show "JS.ORG")`);
+  }
   for (const key of ["og:image", "twitter:image"]) {
     const image = meta(key);
     const path = onSite(image);
@@ -59,8 +71,9 @@ for (const file of pages(OUT)) {
     else if (!pngIs1200x630(file)) problems.push(`${page}: ${key} "${image}" is not a 1200×630 PNG`);
   }
 }
+if (!existsSync(join(OUT, "favicon.ico"))) problems.push("favicon.ico is not in the build");
 if (problems.length) {
-  console.error(`Titles and descriptions to fix:\n${problems.map((p) => `  ${p}`).join("\n")}`);
+  console.error(`Search and link-preview problems to fix:\n${problems.map((p) => `  ${p}`).join("\n")}`);
   process.exit(1);
 }
 console.log("Every page fits search results and has its own link preview.");
