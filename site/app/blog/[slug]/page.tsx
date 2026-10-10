@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, getPosts } from "@/lib/blog";
 import { renderMarkdown } from "@/lib/markdown";
-import { MAINTAINER, SITE, jsonLd as ldJson, pageTitle } from "@/lib/site";
+import { MAINTAINER, PUBLISHER, SITE, breadcrumbs, jsonLd as ldJson, pageTitle } from "@/lib/site";
 
 const authorUrl = (name: string) => (name === MAINTAINER.name ? MAINTAINER.url : undefined);
 import { Prose } from "@/src/DocsBody";
@@ -40,17 +40,36 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const post = getPost((await params).slug);
   if (!post) notFound();
   const { html } = renderMarkdown(post.source.replace(/^#\s.*\n/, ""));
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.description,
-    datePublished: post.date,
-    author: { "@type": "Person", name: post.author, url: authorUrl(post.author) },
-    publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
-    mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
-    keywords: post.tags.join(", "),
-  };
+  const url = `${SITE.url}/blog/${post.slug}`;
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.description,
+      url,
+      mainEntityOfPage: url,
+      image: `${SITE.url}/og/blog-${post.slug}.png`,
+      datePublished: post.date,
+      dateModified: post.updated,
+      author: { "@type": "Person", name: post.author, url: authorUrl(post.author) },
+      publisher: PUBLISHER,
+      keywords: post.tags.join(", "),
+    },
+    {
+      "@context": "https://schema.org",
+      ...breadcrumbs([
+        { name: "Blog", path: "/blog" },
+        { name: post.title, path: `/blog/${post.slug}` },
+      ]),
+    },
+  ];
+  // Two more posts to read next, preferring ones that share a tag with this one.
+  const shared = (other: typeof post) => other.tags.filter((tag) => post.tags.includes(tag)).length;
+  const more = getPosts()
+    .filter((other) => other.slug !== post.slug)
+    .sort((a, b) => shared(b) - shared(a))
+    .slice(0, 2);
   return (
     <div className="container blog-post">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }} />
@@ -71,6 +90,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         {authorUrl(post.author) ? <a href={authorUrl(post.author)}>{post.author}</a> : post.author}
       </p>
       <Prose html={html} />
+      {more.length ? (
+        <nav className="blog-more" aria-label="More posts">
+          <h2>Read next</h2>
+          {more.map((other) => (
+            <Link key={other.slug} href={`/blog/${other.slug}`}>
+              <strong>{other.title}</strong>
+              <span>{other.description}</span>
+            </Link>
+          ))}
+        </nav>
+      ) : null}
     </div>
   );
 }

@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { DOCS } from "@/lib/docs";
 import { shareMeta } from "@/lib/meta";
+import { pageTitle } from "@/lib/site";
 import { DocPage } from "./DocPage";
 
 const start = DOCS[0]!;
 
 // /docs shows the first guide; search engines are pointed at its own address.
 export const metadata: Metadata = {
-  title: start.title,
+  title: pageTitle(start.searchTitle),
   description: start.description,
   ...shareMeta({
     path: `/docs/${start.slug}`,
-    title: `${start.title} · Hintbeam docs`,
+    title: `${start.searchTitle} · Hintbeam docs`,
     description: start.description,
     image: `/og/docs-${start.slug}.png`,
     type: "article",

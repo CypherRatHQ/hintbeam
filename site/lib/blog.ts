@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { lastModified } from "./git";
 import { MAINTAINER } from "./site";
 
 export interface Post {
@@ -7,6 +8,8 @@ export interface Post {
   title: string;
   description: string;
   date: string;
+  /** The day the post last changed: `updated` in its frontmatter, else git, else its date. */
+  updated: string;
   author: string;
   tags: string[];
   source: string;
@@ -29,15 +32,20 @@ function parse(file: string): Omit<Post, "slug"> {
       data[key] = raw.replace(/^["']|["']$/g, "");
     }
   }
+  const date = String(data.date ?? "1970-01-01");
   return {
     title: String(data.title ?? file),
     description: String(data.description ?? ""),
-    date: String(data.date ?? "1970-01-01"),
+    date,
+    updated: String(data.updated ?? latest(date, lastModified(`site/content/blog/${file}`))),
     author: String(data.author ?? MAINTAINER.name),
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     source: text.slice(match?.[0].length ?? 0),
   };
 }
+
+/** The later of two "YYYY-MM-DD" days: a post edited in git before its stated date keeps that date. */
+const latest = (a: string, b?: string) => (b && b > a ? b : a);
 
 /** A post's URL comes from its file name, so only plain lowercase words and dashes are allowed. */
 function slugOf(file: string): string {

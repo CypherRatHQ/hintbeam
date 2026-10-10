@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { shareMeta } from "@/lib/meta";
 import { notFound } from "next/navigation";
 import { DOCS } from "@/lib/docs";
+import { pageTitle } from "@/lib/site";
 import { DocPage } from "../DocPage";
 
 export const dynamicParams = false;
@@ -15,11 +16,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const doc = DOCS.find((d) => d.slug === slug);
   if (!doc) return {};
   return {
-    title: doc.title,
+    title: pageTitle(doc.searchTitle),
     description: doc.description,
     ...shareMeta({
       path: `/docs/${doc.slug}`,
-      title: `${doc.title} · Hintbeam docs`,
+      title: `${doc.searchTitle} · Hintbeam docs`,
       description: doc.description,
       image: `/og/docs-${doc.slug}.png`,
       type: "article",
